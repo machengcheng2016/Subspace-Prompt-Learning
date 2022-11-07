@@ -1,3 +1,5 @@
+cd ..
+
 shots=$1
 epoch=$2
 for dataset in $3
