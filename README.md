@@ -51,7 +51,7 @@ cd scripts
 bash coop.sh [SHOTS] [EPOCH] [DATASET]
 
 
-############### Step 2. compute dominate eigenvectors representing the early stage gradient flow ###############
+############### Step 2. compute dominate eigenvectors representing the early-stage gradient flow ###############
 # [FINISH] and [DIM] are the only two hyper-paramters in SubPT, corresponding to the $t_early$ and $r$ in our paper.
 # [FINISH] and [DIM] are optionally specified as follows. [DIM] < [FINISH]. Other [DIM] values lead to similar results.
 # (10, 5)  for 1 shot
@@ -73,6 +73,10 @@ To run "CoOp+NFL" and "CoOp+SubPT+NFL", just replace `coop.sh` with `coop_nfl.sh
 Before Step 1, please remember to pre-compute the text features with zero-shot CLIP and save them in the `./text_features_nfl` directory. (Hint: run `zeroshot2.sh` and add `torch.save` at [here](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/CoOp/trainers/zsclip.py#L97)).
 
 We kindly write a `./output/quick_view_all_acc.py` script for you, in order to measure the classification accuracy.
+
+
+## Zero-Shot CLIP
+Please go to the `./CoOp/script' directory and run `zeroshot.sh`.
 
 ## Citation
 If you find this work useful, please consider citing our paper. We provide a BibTeX entry of our paper below:
