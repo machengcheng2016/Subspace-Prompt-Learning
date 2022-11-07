@@ -4,6 +4,7 @@ Official code for "Understanding and Mitigating Overfitting in Prompt Tuning for
 ## TL;DR
 We propose `Subspace Prompt Tuning (SubPT)` to mitigate the overfitting issue in the well-known prompt tuning method [CoOp](https://github.com/KaiyangZhou/CoOp), and further propose `Novel Feature Learner (NFL)` to enhance the generalization ability onto novel categories beyond the training set.
 
+`SubPT` is viewed as:
 ![SubPT](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/teaser.png)
 
 The full picture of our method:
