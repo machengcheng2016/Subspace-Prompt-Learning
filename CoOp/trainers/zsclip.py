@@ -64,8 +64,8 @@ class ZeroshotCLIP(TrainerX):
 class ZeroshotCLIP2(ZeroshotCLIP):
     """Prompt ensembling."""
 
-    # templates = IMAGENET_TEMPLATES
-    templates = IMAGENET_TEMPLATES_SELECT
+    templates = IMAGENET_TEMPLATES
+    # templates = IMAGENET_TEMPLATES_SELECT
 
     def build_model(self):
         cfg = self.cfg
