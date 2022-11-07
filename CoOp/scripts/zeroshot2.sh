@@ -1,7 +1,7 @@
 cd ..
 
 DATA=/path/to/data
-TRAINER=ZeroshotCLIP
+TRAINER=ZeroshotCLIP2
 DATASET=$1
 CFG=rn50_ep50
 
