@@ -136,4 +136,4 @@ If you find this work useful, please consider citing our paper. We provide a Bib
 }
 ```
 
-Feel free to contact me via [email](machengcheng2016@gmail.com) if you have any problems.
+Feel free to contact me via machengcheng2016@gmail.com if you have any problems.
