@@ -1,3 +1,5 @@
+cd ..
+
 shots=$1
 type=$2
 epoch=$3
