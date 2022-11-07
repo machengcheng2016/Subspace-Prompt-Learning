@@ -76,7 +76,7 @@ We kindly write a `./output/quick_view_all_acc.py` script for you, in order to m
 
 
 ## Zero-Shot CLIP
-Please go to the `./CoOp/script` directory and run `zeroshot.sh`.
+Please go to the `./CoOp/script` directory and run `bash zeroshot.sh [DATASET]`.
 
 ## Citation
 If you find this work useful, please consider citing our paper. We provide a BibTeX entry of our paper below:
