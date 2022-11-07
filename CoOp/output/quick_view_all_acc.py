@@ -2,7 +2,7 @@ import os
 import numpy as np
 
 tots = []
-for i in range(1, 100):
+for i in range(1, 3):
     try:
         f = open(os.path.join("seed{}".format(i), "log.txt"))
         items = f.readlines()
