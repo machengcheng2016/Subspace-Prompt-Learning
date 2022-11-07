@@ -4,6 +4,8 @@ Official code for "Understanding and Mitigating Overfitting in Prompt Tuning for
 ## TL;DR
 We propose `Subspace Prompt Tuning (SubPT)` to mitigate the overfitting issue in the well-known prompt tuning method [CoOp](https://github.com/KaiyangZhou/CoOp), and further propose `Novel Feature Learner (NFL)` to enhance the generalization ability onto novel categories beyond the training set.
 
+![RUNOOB 图标](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/teaser.png)
+
 ## Preparation
 This code is based on the toolbox [Dassl.pytorch](https://github.com/KaiyangZhou/Dassl.pytorch), and we add the [model_subspace_backward_and_update](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/Dassl.pytorch/dassl/engine/trainer.py#L311) function into `Dassl.pytorch/dassl/engine/trainer.py` to support subspace prompt tuning. 
 
@@ -28,6 +30,8 @@ cd Dassl.pytorch
 python setup.py develop
 ```
 Then go to the `CoOp` directory and run `pip install -r requirements.txt` to make a few more packages required by CLIP.
+
+Follow [DATASETS.md](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/CoOp/DATASETS.md) to install the datasets.
 
 ## Few-shot classification on 11 datasets
 Please go to the `CoOp` directory, and run "CoOp+SubPT" as follows.
