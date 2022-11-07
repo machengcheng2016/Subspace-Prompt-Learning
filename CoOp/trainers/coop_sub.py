@@ -239,7 +239,7 @@ class CustomCLIP(nn.Module):
 
 
 @TRAINER_REGISTRY.register()
-class CoOp_psgd(TrainerX):
+class CoOp_sub(TrainerX):
     """Context Optimization (CoOp).
 
     Learning to Prompt for Vision-Language Models
