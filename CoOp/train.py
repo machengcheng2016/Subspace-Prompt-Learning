@@ -117,18 +117,10 @@ def extend_cfg(cfg):
     cfg.LOSS.LOSS_TYPE = "cosine"
     
     cfg.DIRECT_RESUME = "" # load from param_start
-    cfg.TRAINER.P = ""  # pre-computed PCA bases
-    cfg.TRAIN.SAVE_QUARTER = False # save at 1/4, 1/2, 3/4 epoch for denser dldr sampling
-    cfg.TRAIN.SAVE_HALF = False # save at 1/2 epoch for denser dldr sampling
-    cfg.CLASSNAMES_AUG = ""
+    cfg.TRAINER.U = ""  # pre-computed PCA bases
+    cfg.CLASSNAMES_NFL = ""
     cfg.DIRECT_RESUME_ALSO_LR = False
-    cfg.TEXT_FEATURES_AUG = ""
-
-    cfg.DEQUE = False
-    cfg.PCA_RANK = 5
-    cfg.DEQUE_LENGTH = 10
-    cfg.APPEND_HALF = False
-    cfg.APPEND_QUARTER = False
+    cfg.TEXT_FEATURES_NFL = ""
     
     
 def setup_cfg(args):
