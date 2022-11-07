@@ -60,10 +60,10 @@ class TextEncoder(nn.Module):
 
 
 class PromptLearner(nn.Module):
-    def __init__(self, cfg, classnames, classnames_aug, clip_model):
+    def __init__(self, cfg, classnames, classnames_nfl, clip_model):
         super().__init__()
         n_cls = len(classnames)
-        n_cls_aug = len(classnames_aug)
+        n_cls_nfl = len(classnames_nfl)
         n_ctx = cfg.TRAINER.COOP.N_CTX
         ctx_init = cfg.TRAINER.COOP.CTX_INIT
         dtype = clip_model.dtype
@@ -109,30 +109,30 @@ class PromptLearner(nn.Module):
         name_lens = [len(_tokenizer.encode(name)) for name in classnames]
         prompts = [prompt_prefix + " " + name + "." for name in classnames]
         #
-        classnames_aug = [name.replace("_", " ") for name in classnames_aug]
-        prompts_aug = [prompt_prefix + " " + name + "." for name in classnames_aug]
+        classnames_nfl = [name.replace("_", " ") for name in classnames_nfl]
+        prompts_nfl = [prompt_prefix + " " + name + "." for name in classnames_nfl]
 
         tokenized_prompts = torch.cat([clip.tokenize(p) for p in prompts])
         #
-        tokenized_prompts_aug = torch.cat([clip.tokenize(p) for p in prompts_aug])
+        tokenized_prompts_nfl = torch.cat([clip.tokenize(p) for p in prompts_nfl])
         
         with torch.no_grad():
             embedding = clip_model.token_embedding(tokenized_prompts).type(dtype)
-            embedding_aug = clip_model.token_embedding(tokenized_prompts_aug).type(dtype)
+            embedding_nfl = clip_model.token_embedding(tokenized_prompts_nfl).type(dtype)
 
         # These token vectors will be saved when in save_model(),
         # but they should be ignored in load_model() as we want to use
         # those computed using the current class names
         self.register_buffer("token_prefix", embedding[:, :1, :])  # SOS
         self.register_buffer("token_suffix", embedding[:, 1 + n_ctx:, :])  # CLS, EOS
-        self.register_buffer("token_prefix_aug", embedding_aug[:, :1, :])  # SOS
-        self.register_buffer("token_suffix_aug", embedding_aug[:, 1 + n_ctx:, :])  # CLS, EOS
+        self.register_buffer("token_prefix_nfl", embedding_nfl[:, :1, :])  # SOS
+        self.register_buffer("token_suffix_nfl", embedding_nfl[:, 1 + n_ctx:, :])  # CLS, EOS
 
         self.n_cls = n_cls
-        self.n_cls_aug = n_cls_aug
+        self.n_cls_nfl = n_cls_nfl
         self.n_ctx = n_ctx
         self.tokenized_prompts = tokenized_prompts  # torch.Tensor
-        self.tokenized_prompts_aug = tokenized_prompts_aug
+        self.tokenized_prompts_nfl = tokenized_prompts_nfl
         self.class_token_position = cfg.TRAINER.COOP.CLASS_TOKEN_POSITION
         self.name_lens = name_lens
 
@@ -140,12 +140,12 @@ class PromptLearner(nn.Module):
         ctx_ = self.ctx
         if ctx_.dim() == 2:
             ctx = ctx_.unsqueeze(0).expand(self.n_cls, -1, -1)
-            ctx_aug = ctx_.unsqueeze(0).expand(self.n_cls_aug, -1, -1)
+            ctx_nfl = ctx_.unsqueeze(0).expand(self.n_cls_nfl, -1, -1)
 
         prefix = self.token_prefix
         suffix = self.token_suffix
-        prefix_aug = self.token_prefix_aug
-        suffix_aug = self.token_suffix_aug
+        prefix_nfl = self.token_prefix_nfl
+        suffix_nfl = self.token_suffix_nfl
 
         if self.class_token_position == "end":
             prompts = torch.cat(
@@ -156,11 +156,11 @@ class PromptLearner(nn.Module):
                 ],
                 dim=1,
             )
-            prompts_aug = torch.cat(
+            prompts_nfl = torch.cat(
                 [
-                    prefix_aug,  # (n_cls, 1, dim)
-                    ctx_aug,  # (n_cls, n_ctx, dim)
-                    suffix_aug,  # (n_cls, *, dim)
+                    prefix_nfl,  # (n_cls, 1, dim)
+                    ctx_nfl,  # (n_cls, n_ctx, dim)
+                    suffix_nfl,  # (n_cls, *, dim)
                 ],
                 dim=1,
             )
@@ -211,7 +211,7 @@ class PromptLearner(nn.Module):
         else:
             raise ValueError
 
-        return prompts, prompts_aug
+        return prompts, prompts_nfl
 
 
 CUSTOM_TEMPLATES = {
@@ -235,43 +235,43 @@ CUSTOM_TEMPLATES = {
 
 
 class CustomCLIP(nn.Module):
-    def __init__(self, cfg, classnames, classnames_aug, clip_model):
+    def __init__(self, cfg, classnames, classnames_nfl, clip_model):
         super().__init__()
-        self.prompt_learner = PromptLearner(cfg, classnames, classnames_aug, clip_model)
+        self.prompt_learner = PromptLearner(cfg, classnames, classnames_nfl, clip_model)
         self.tokenized_prompts = self.prompt_learner.tokenized_prompts
         self.image_encoder = clip_model.visual
         self.text_encoder = TextEncoder(clip_model)
         self.logit_scale = clip_model.logit_scale
         self.dtype = clip_model.dtype
         #
-        self.tokenized_prompts_aug = self.prompt_learner.tokenized_prompts_aug
+        self.tokenized_prompts_nfl = self.prompt_learner.tokenized_prompts_nfl
 
     def forward(self, image, train=False):
         image_features = self.image_encoder(image.type(self.dtype))
 
-        prompts, prompts_aug = self.prompt_learner()
+        prompts, prompts_nfl = self.prompt_learner()
         tokenized_prompts = self.tokenized_prompts
         text_features = self.text_encoder(prompts, tokenized_prompts)
         
-        tokenized_prompts_aug = self.tokenized_prompts_aug
-        text_features_aug = self.text_encoder(prompts_aug, tokenized_prompts_aug)
+        tokenized_prompts_nfl = self.tokenized_prompts_nfl
+        text_features_nfl = self.text_encoder(prompts_nfl, tokenized_prompts_nfl)
 
         image_features = image_features / image_features.norm(dim=-1, keepdim=True)
         text_features = text_features / text_features.norm(dim=-1, keepdim=True)
-        text_features_aug = text_features_aug / text_features_aug.norm(dim=-1, keepdim=True)
+        text_features_nfl = text_features_nfl / text_features_nfl.norm(dim=-1, keepdim=True)
 
         logit_scale = self.logit_scale.exp()
         logits = logit_scale * image_features @ text_features.t()
 
         if train:
-            return logits, text_features_aug
+            return logits, text_features_nfl
         else:
             return logits
 
 
-class AugLoss(_Loss):
+class NflLoss(_Loss):
     def __init__(self, loss_type):
-        super(AugLoss, self).__init__()
+        super(NflLoss, self).__init__()
         if loss_type == "cosine":
             self.criterion = nn.CosineEmbeddingLoss()
         elif loss_type == "l2":
@@ -279,16 +279,16 @@ class AugLoss(_Loss):
         else:
             raise NotImplementedError("{} not supported.".format(loss_type))
 
-    def forward(self, logits, label, text_features_aug, text_features_aug_gt):
+    def forward(self, logits, label, text_features_nfl, text_features_nfl_gt):
         xe_loss = F.cross_entropy(logits, label)
 
-        aug_loss = self.criterion(text_features_aug, text_features_aug_gt, target=torch.ones(text_features_aug.shape[0]).to(text_features_aug))
+        nfl_loss = self.criterion(text_features_nfl, text_features_nfl_gt, target=torch.ones(text_features_nfl.shape[0]).to(text_features_nfl))
 
-        return xe_loss, aug_loss
+        return xe_loss, nfl_loss
 
 
 @TRAINER_REGISTRY.register()
-class CoOp_psgd_aug2(TrainerX):
+class CoOp_sub_nfl(TrainerX):
     """Context Optimization (CoOp).
 
     Learning to Prompt for Vision-Language Models
@@ -301,9 +301,9 @@ class CoOp_psgd_aug2(TrainerX):
     def build_model(self):
         cfg = self.cfg
         classnames = self.dm.dataset.classnames
-        assert osp.exists(cfg.CLASSNAMES_AUG)
-        classnames_aug = torch.load(cfg.CLASSNAMES_AUG)
-        text_features_aug = torch.load(cfg.TEXT_FEATURES_AUG)
+        assert osp.exists(cfg.CLASSNAMES_NFL)
+        classnames_nfl = torch.load(cfg.CLASSNAMES_NFL)
+        text_features_nfl = torch.load(cfg.TEXT_FEATURES_NFL)
 
         print(f"Loading CLIP (backbone: {cfg.MODEL.BACKBONE.NAME})")
         clip_model = load_clip_to_cpu(cfg)
@@ -313,7 +313,7 @@ class CoOp_psgd_aug2(TrainerX):
             clip_model.float()
 
         print("Building custom CLIP")
-        self.model = CustomCLIP(cfg, classnames, classnames_aug, clip_model)
+        self.model = CustomCLIP(cfg, classnames, classnames_nfl, clip_model)
         print("Turning off gradients in both the image and the text encoder")
         for name, param in self.model.named_parameters():
             if "prompt_learner" not in name:
@@ -323,7 +323,7 @@ class CoOp_psgd_aug2(TrainerX):
             load_pretrained_weights(self.model.prompt_learner, cfg.MODEL.INIT_WEIGHTS)
 
         self.model.to(self.device)
-        self.zs_clip_text_features = text_features_aug.to(self.device)
+        self.zs_clip_text_features = text_features_nfl.to(self.device)
         # NOTE: only give prompt_learner to the optimizer
         self.optim = build_optimizer(self.model.prompt_learner, cfg.OPTIM)
         self.sched = build_lr_scheduler(self.optim, cfg.OPTIM)
@@ -344,7 +344,7 @@ class CoOp_psgd_aug2(TrainerX):
         self.U = torch.load(cfg.TRAINER.U).to(self.device).type(clip_model.dtype)
         
         # build criterion
-        self.criterion = AugLoss(loss_type=cfg.LOSS.LOSS_TYPE).to(self.device)
+        self.criterion = NflLoss(loss_type=cfg.LOSS.LOSS_TYPE).to(self.device)
 
 
     def forward_backward(self, batch):
@@ -360,14 +360,14 @@ class CoOp_psgd_aug2(TrainerX):
             self.scaler.step(self.optim)
             self.scaler.update()
         else:
-            output, text_features_aug = self.model(image, train=True)
-            xe_loss, aug_loss = self.criterion(output, label, text_features_aug, self.zs_clip_text_features.detach())
-            total_loss = xe_loss + self.cfg.LOSS.LAMBDA * aug_loss
+            output, text_features_nfl = self.model(image, train=True)
+            xe_loss, nfl_loss = self.criterion(output, label, text_features_nfl, self.zs_clip_text_features.detach())
+            total_loss = xe_loss + self.cfg.LOSS.LAMBDA * nfl_loss
             self.model_subspace_backward_and_update(total_loss)
 
         loss_summary = {
             "xe_loss": xe_loss.item(),
-            "aug_loss": aug_loss.item(),
+            "nfl_loss": nfl_loss.item(),
             "acc": compute_accuracy(output, label)[0].item(),
         }
 
@@ -416,11 +416,11 @@ class CoOp_psgd_aug2(TrainerX):
             if "token_suffix" in state_dict:
                 del state_dict["token_suffix"]
                 
-            if "token_prefix_aug" in state_dict:
-                del state_dict["token_prefix_aug"]
+            if "token_prefix_nfl" in state_dict:
+                del state_dict["token_prefix_nfl"]
 
-            if "token_suffix_aug" in state_dict:
-                del state_dict["token_suffix_aug"]
+            if "token_suffix_nfl" in state_dict:
+                del state_dict["token_suffix_nfl"]
 
             print("Loading weights to {} "
                   'from "{}" (epoch = {})'.format(name, model_path, epoch))
