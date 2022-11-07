@@ -1,4 +1,6 @@
-for dataset in $1
+shots=$1
+epoch=$2
+for dataset in $3
 do
   for seed in 1 2 3
   do
