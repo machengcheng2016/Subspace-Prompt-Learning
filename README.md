@@ -13,7 +13,7 @@ The full picture of our method:
 ## Preparation
 This code is based on the toolbox [Dassl.pytorch](https://github.com/KaiyangZhou/Dassl.pytorch), and we add the [model_subspace_backward_and_update](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/Dassl.pytorch/dassl/engine/trainer.py#L311) function into `Dassl.pytorch/dassl/engine/trainer.py` to support subspace prompt tuning. 
 
-Before you go, please go to `Dassl.pytorch` and make installation as follows.
+Before you go, please go to the `./Dassl.pytorch` directory and make installation as follows.
 ```
 # Create a conda environment
 conda create -n subpt python=3.7
@@ -47,6 +47,7 @@ Please go to the `./CoOp` directory, and run "CoOp+SubPT" as follows.
 # (4 shots, 100 epoch) 
 # (8 shots, 200 epoch) 
 # (16 shots, 200 epoch)
+# For ImageNet, epoch is especially set as 50.
 cd scripts
 bash coop.sh [SHOTS] [EPOCH] [DATASET]
 
@@ -65,7 +66,7 @@ python compute_eigenvector.py --ckpt_path [CKPT_PATH] --start 1 --finish [FINISH
 
 
 ############### Step 3. re-run CoOp with SubPT ###############
-# Note that [FINISH] and [DIM] are in correspondence with Step 2.
+# Note that [SHOTS] and [EPOCH] are in correspondence with Step 1, and [FINISH] and [DIM] are in correspondence with Step 2.
 cd scripts
 bash coop_sub.sh [SHOTS] [EPOCH] [FINISH] [DIM] [DATASET]
 ```
@@ -75,8 +76,45 @@ Before Step 1, please remember to pre-compute the text features with zero-shot C
 We kindly write a `./output/quick_view_all_acc.py` script for you, in order to measure the classification accuracy.
 
 
+
+
+
+## Generalization From Base to Novel Classes
+Please go to the `./CoOp` directory, and run "CoOp+SubPT" as follows.
+```
+############### Step 1. run CoOp ###############
+# [SHOTS] and [EPOCH] are fixed as (4 shots, 100 epoch).
+cd scripts
+bash base2new_train_coop.sh [DATASET]
+
+
+############### Step 2. compute dominate eigenvectors representing the early-stage gradient flow ###############
+# [FINISH] and [DIM] are fixed as 30 and 10, respectively.
+cd ..
+python compute_eigenvector.py --ckpt_path [CKPT_PATH] --start 1 --finish 30 --save_name \
+  full_P/b2n-[DATASET]-CoOp-4shots-nctx16-seed1-start1-finish30-dim10.pth --n_components 10
+
+
+############### Step 3. re-run CoOp with SubPT ###############
+# Note that [FINISH] and [DIM] are in correspondence with Step 2.
+cd scripts
+bash base2new_train_coop_sub.sh [DATASET]
+```
+After training, do evaluation as follows
+```
+cd scripts
+# [SUB] is base or new. [LOADEP] is 100, except 50 for ImageNet.
+bash base2new_test_coop_sub.sh [SUB] [LOADEP] [DATASET]
+```
+
+
+
 ## Zero-Shot CLIP
 Please go to the `./CoOp/script` directory and run `bash zeroshot.sh [DATASET]`.
+
+
+
+
 
 ## Citation
 If you find this work useful, please consider citing our paper. We provide a BibTeX entry of our paper below:
