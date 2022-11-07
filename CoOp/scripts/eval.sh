@@ -3,14 +3,14 @@
 cd ..
 
 # custom config
-DATA=/path/to/data
 TRAINER=$1
+DATASET=$2
+
+DATA=/path/to/data
 SHOTS=4
 NCTX=16
 CSC=False
 CTP=end
-
-DATASET=$2
 CFG=rn50_ep50
 
 
