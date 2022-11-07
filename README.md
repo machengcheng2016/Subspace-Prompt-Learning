@@ -30,7 +30,7 @@ python setup.py develop
 Then go to the `CoOp` directory and run `pip install -r requirements.txt` to make a few more packages required by CLIP.
 
 ## Few-shot classification on 11 datasets
-Please go to the `CoOp` directory.
+Please go to the `CoOp` directory, and run "CoOp+SubPT" as follows.
 ```
 ############### Step 1. run CoOp ###############
 # [SHOTS] and [EPOCH] are pairwise hyper-parameters in CoOp, specified as 
@@ -57,13 +57,12 @@ python compute_eigenvector.py --ckpt_path [CKPT_PATH] --start 1 --finish [FINISH
 
 
 ############### Step 3. re-run CoOp with SubPT ###############
+# Note that [FINISH] and [DIM] are in correspondence with Step 2.
 cd scripts
 bash coop_sub.sh [SHOTS] [EPOCH] [FINISH] [DIM] [DATASET]
-
-
-
 ```
-
+To run "CoOp+NFL" and "CoOp+SubPT+NFL", just replace `coop.sh` with `coop_nfl.sh`, and replace `coop_sub.sh` with `coop_sub_nfl.sh`. 
+Before Step 1, please remember to pre-compute the text features with zero-shot CLIP and save them in the `text_features_nfl` directory. (Hint: run `zeroshot2.sh` and add `torch.save` at [here](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/CoOp/trainers/zsclip.py#L97)).
 
 
 ## Citation
