@@ -1,11 +1,10 @@
 cd ..
 
 shots=$1
-type=$2
-epoch=$3
-finish=$4
-dim=$5
-for dataset in $6
+epoch=$2
+finish=$3
+dim=$4
+for dataset in $5
 do
   for seed in 1 2 3
   do
