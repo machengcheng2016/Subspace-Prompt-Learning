@@ -21,7 +21,7 @@ do
     DATASET.NUM_SHOTS ${shots} \
     TRAIN.CHECKPOINT_FREQ 0 \
     TRAINER.U full_U/${dataset}-CoOp_nfl-${shots}shots-nctx16-seed${seed}-start1-finish${finish}-dim${dim}.pth \
-    CLASSNAMES_AUG classnames_nfl/imagenet_100.pth \
-    TEXT_FEATURES_AUG text_features_nfl/imagenet_100.pth
+    CLASSNAMES_NFL classnames_nfl/imagenet_100.pth \
+    TEXT_FEATURES_NFL text_features_nfl/imagenet_100.pth
   done
 done
