@@ -1,5 +1,5 @@
 # Subspace-Prompt-Learning
-Official code for "Understanding and Mitigating Overfitting in Prompt Tuning for Vision-Language Models"
+Official code for "Understanding and Mitigating Overfitting in Prompt Tuning for Vision-Language Models".
 
 ## TL;DR
 We propose `Subspace Prompt Tuning (SubPT)` to mitigate the overfitting issue in the well-known prompt tuning method [CoOp](https://github.com/KaiyangZhou/CoOp), and further propose `Novel Feature Learner (NFL)` to enhance the generalization ability onto novel categories beyond the training set.
@@ -29,12 +29,35 @@ Then go to the `CoOp` directory and run `pip install -r requirements.txt` to mak
 
 ## Few-shot classification on 11 datasets
 ```
-# Step 1. run CoOp
-bash coop.sh [SHOTS] [EPOCH] [DATASET]
+############### Step 1. run CoOp ###############
 # [SHOTS] and [EPOCH] are pairwise hyper-parameters in CoOp, specified as (1 shot, 50 epoch), (2 shots, 100 epoch),
 # (4 shots, 100 epoch), (8 shots, 200 epoch), (16 shots, 200 epoch).
+cd scripts
+bash coop.sh [SHOTS] [EPOCH] [DATASET]
+
+
+############### Step 2. compute dominate eigenvectors representing the early stage gradient flow ###############
+# [FINISH] and [DIM] are the only two hyper-paramters in SubPT, corresponding to the $t_early$ and $r$ in our paper.
+# [FINISH] and [DIM] are optionally specified as:
+# (10, 5)  for 1 shot
+# (20, 10) for 2 shot
+# (30, 10) for 4 shot
+# (40, 10) for 8 shot 
+# (50, 10) for 16 shot
+cd ..
+python compute_eigenvector.py --ckpt_path [CKPT_PATH] --start 1 --finish [FINISH] --save_name \
+  full_P/[DATASET]-CoOp-[SHOTS]shots-nctx16-seed1-start1-finish[FINISH]-dim[DIM].pth --n_components [DIM]
+
+
+############### Step 3. re-run CoOp with SubPT ###############
+cd scripts
+bash coop_sub.sh [SHOTS] [EPOCH] [FINISH] [DIM] [DATASET]
+
+
 
 ```
+
+
 
 ## Citation
 If you find this work useful, please consider citing our paper. We provide a BibTeX entry of our paper below:
