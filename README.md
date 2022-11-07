@@ -5,7 +5,9 @@ Official code for "Understanding and Mitigating Overfitting in Prompt Tuning for
 We propose `Subspace Prompt Tuning (SubPT)` to mitigate the overfitting issue in the well-known prompt tuning method [CoOp](https://github.com/KaiyangZhou/CoOp), and further propose `Novel Feature Learner (NFL)` to enhance the generalization ability onto novel categories beyond the training set.
 
 ## Preparation
-This code is based on the toolbox [Dassl.pytorch](https://github.com/KaiyangZhou/Dassl.pytorch), and we add the [model_subspace_backward_and_update](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/Dassl.pytorch/dassl/engine/trainer.py#L311) function into `Dassl.pytorch/dassl/engine/trainer.py` to support subspace prompt tuning. Before you go, please make installation as follows.
+This code is based on the toolbox [Dassl.pytorch](https://github.com/KaiyangZhou/Dassl.pytorch), and we add the [model_subspace_backward_and_update](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/Dassl.pytorch/dassl/engine/trainer.py#L311) function into `Dassl.pytorch/dassl/engine/trainer.py` to support subspace prompt tuning. 
+
+Before you go, please go to `Dassl.pytorch` and make installation as follows.
 ```
 # Create a conda environment
 conda create -n subpt python=3.7
@@ -28,17 +30,22 @@ python setup.py develop
 Then go to the `CoOp` directory and run `pip install -r requirements.txt` to make a few more packages required by CLIP.
 
 ## Few-shot classification on 11 datasets
+Please go to the `CoOp` directory.
 ```
 ############### Step 1. run CoOp ###############
-# [SHOTS] and [EPOCH] are pairwise hyper-parameters in CoOp, specified as (1 shot, 50 epoch), (2 shots, 100 epoch),
-# (4 shots, 100 epoch), (8 shots, 200 epoch), (16 shots, 200 epoch).
+# [SHOTS] and [EPOCH] are pairwise hyper-parameters in CoOp, specified as 
+# (1 shot, 50 epoch)
+# (2 shots, 100 epoch)
+# (4 shots, 100 epoch) 
+# (8 shots, 200 epoch) 
+# (16 shots, 200 epoch)
 cd scripts
 bash coop.sh [SHOTS] [EPOCH] [DATASET]
 
 
 ############### Step 2. compute dominate eigenvectors representing the early stage gradient flow ###############
 # [FINISH] and [DIM] are the only two hyper-paramters in SubPT, corresponding to the $t_early$ and $r$ in our paper.
-# [FINISH] and [DIM] are optionally specified as:
+# [FINISH] and [DIM] are optionally specified as follows. [DIM] < [FINISH]. Other [DIM] values lead to similar results.
 # (10, 5)  for 1 shot
 # (20, 10) for 2 shot
 # (30, 10) for 4 shot
