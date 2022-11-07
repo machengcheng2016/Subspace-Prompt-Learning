@@ -2,7 +2,7 @@ cd ..
 
 for dataset in $1
 do
-  for seed in $2
+  for seed in 1 2 3
   do
     python3 train.py \
     --root /path/to/data \
