@@ -11,7 +11,7 @@ The full picture of our method:
 ![Overview](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/overview.png)
 
 ## Preparation
-This code is based on the toolbox [Dassl.pytorch](https://github.com/KaiyangZhou/Dassl.pytorch), and we add the [model_subspace_backward_and_update](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/Dassl.pytorch/dassl/engine/trainer.py#L311) function into `Dassl.pytorch/dassl/engine/trainer.py` to support subspace prompt tuning. 
+This repo is based on the toolbox [Dassl.pytorch](https://github.com/KaiyangZhou/Dassl.pytorch), and we add the [model_subspace_backward_and_update](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/Dassl.pytorch/dassl/engine/trainer.py#L311) function into `Dassl.pytorch/dassl/engine/trainer.py` to support subspace prompt tuning. 
 
 Before you go, please go to the `./Dassl.pytorch` directory and make installation as follows.
 ```
@@ -29,7 +29,7 @@ pip install -r requirements.txt
 # For example:
 conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
 
-# Install this library (no need to re-build if the source code is modified)
+# Install this library
 cd Dassl.pytorch
 python setup.py develop
 ```
@@ -37,7 +37,8 @@ Then go to the `./CoOp` directory and run `pip install -r requirements.txt` to m
 
 Follow [DATASETS.md](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/CoOp/DATASETS.md) to install the datasets.
 
-## Few-shot classification on 11 datasets
+## Usage
+### Few-shot classification on 11 datasets
 Please go to the `./CoOp` directory, and run "CoOp+SubPT" as follows.
 ```
 ############### Step 1. run CoOp ###############
@@ -79,7 +80,7 @@ We kindly write a `./output/quick_view_all_acc.py` script for you, in order to m
 
 
 
-## Base-to-Novel Generalization
+### Base-to-Novel Generalization
 Please go to the `./CoOp` directory, and run "CoOp+SubPT" as follows.
 ```
 ############### Step 1. run CoOp ###############
@@ -109,7 +110,7 @@ bash base2new_test_coop_sub.sh [SUB] [LOADEP] [DATASET]
 
 
 
-## Domain Generalization
+### Domain Generalization
 Please go to the `./CoOp` directory, and run evaluation as follows.
 ```
 cd scripts
@@ -118,7 +119,7 @@ cd scripts
 bash eval.sh [TRAINER] [DATASET]
 ```
 
-## Zero-Shot CLIP
+### Zero-Shot CLIP
 Please go to the `./CoOp/script` directory and run `bash zeroshot.sh [DATASET]`.
 
 
@@ -136,4 +137,11 @@ If you find this work useful, please consider citing our paper. We provide a Bib
 }
 ```
 
-Feel free to contact me via machengcheng2016@gmail.com if you have any problems.
+## Acknowledgements
+* This repo is based on [CoOp](https://github.com/KaiyangZhou/CoOp) and [Dassl.pytorch](https://github.com/KaiyangZhou/Dassl.pytorch).
+* Thanks to [DLDR](https://github.com/nblt/DLDR) repo (see reference [33] in our paper). We borrow many lines of code from it.
+
+
+
+## Contact
+Feel free to contact me via machengcheng2016@gmail.com if you have any problems about our paper or codes.
