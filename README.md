@@ -104,7 +104,7 @@ bash base2new_train_coop_sub.sh [DATASET]
 After training, do evaluation as follows
 ```
 cd scripts
-# [SUB] is base or new. [LOADEP] is 100, except 50 for ImageNet.
+# [SUB] is "base" or "new". [LOADEP] is 100, except 50 for ImageNet.
 bash base2new_test_coop_sub.sh [SUB] [LOADEP] [DATASET]
 ```
 
