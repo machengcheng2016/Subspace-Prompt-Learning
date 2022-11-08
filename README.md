@@ -33,7 +33,7 @@ conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
 cd Dassl.pytorch
 python setup.py develop
 ```
-Then go to the `./CoOp` directory and run `pip install -r requirements.txt` to make a few more packages required by CLIP.
+Then go to the `./CoOp` directory and run `pip install -r requirements.txt` to install a few more packages required by CLIP.
 
 Follow [DATASETS.md](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/CoOp/DATASETS.md) to install the datasets.
 
@@ -139,7 +139,7 @@ If you find this work useful, please consider citing our paper. We provide a Bib
 
 ## Acknowledgements
 * This repo is based on [CoOp](https://github.com/KaiyangZhou/CoOp) and [Dassl.pytorch](https://github.com/KaiyangZhou/Dassl.pytorch).
-* Thanks to [DLDR](https://github.com/nblt/DLDR) repo (see reference [33] in our paper). We borrow many lines of code from it.
+* Thanks to [DLDR](https://github.com/nblt/DLDR) repo (see reference [33] in our paper). It inspires me a lot.
 
 
 
