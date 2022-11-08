@@ -72,7 +72,7 @@ cd scripts
 bash coop_sub.sh [SHOTS] [EPOCH] [FINISH] [DIM] [DATASET]
 ```
 To run "CoOp+NFL" and "CoOp+SubPT+NFL", just replace `coop.sh` with `coop_nfl.sh`, and replace `coop_sub.sh` with `coop_sub_nfl.sh`. 
-Before Step 1, please remember to pre-compute the text features with zero-shot CLIP and save them in the `./text_features_nfl` directory. (Hint: run `zeroshot2.sh` and add `torch.save` at [here](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/CoOp/trainers/zsclip.py#L97)).
+Before Step 1, please remember to pre-compute the text features with zero-shot CLIP and save them in the `./CoOp/text_features_nfl` directory. (Hint: run `zeroshot2.sh` and add `torch.save` at [here](https://github.com/machengcheng2016/Subspace-Prompt-Learning/blob/main/CoOp/trainers/zsclip.py#L97)).
 
 We kindly write a `./output/quick_view_all_acc.py` script for you, in order to measure the classification accuracy.
 
