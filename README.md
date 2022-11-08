@@ -80,7 +80,7 @@ We kindly write a `./output/quick_view_all_acc.py` script for you, in order to m
 
 
 
-### Base-to-Novel Generalization
+### Base-to-Novel Generalization on 11 datasets
 Please go to the `./CoOp` directory, and run "CoOp+SubPT" as follows.
 ```
 ############### Step 1. run CoOp ###############
@@ -110,7 +110,7 @@ bash base2new_test_coop_sub.sh [SUB] [LOADEP] [DATASET]
 
 
 
-### Domain Generalization
+### Domain Generalization on 4 datasets
 Please go to the `./CoOp` directory, and run evaluation as follows.
 ```
 cd scripts
@@ -119,7 +119,7 @@ cd scripts
 bash eval.sh [TRAINER] [DATASET]
 ```
 
-### Zero-Shot CLIP
+### Zero-Shot CLIP Baseline
 Please go to the `./CoOp/script` directory and run `bash zeroshot.sh [DATASET]`.
 
 
