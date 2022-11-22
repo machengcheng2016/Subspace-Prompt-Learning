@@ -129,7 +129,7 @@ If you find this work useful, please consider citing our paper. We provide a Bib
 ```
 @misc{ma2022understanding,
   title={Understanding and Mitigating Overfitting in Prompt Tuning for Vision-Language Models}, 
-  author={Chengcheng Ma and Yang Liu and Jiankang Deng and LingXi Xie and Weiming Dong and Changsheng Xu},
+  author={Chengcheng Ma and Yang Liu and Jiankang Deng and Lingxi Xie and Weiming Dong and Changsheng Xu},
   year={2022},
   eprint={2211.02219},
   archivePrefix={arXiv},
