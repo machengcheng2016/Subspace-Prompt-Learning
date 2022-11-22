@@ -48,7 +48,7 @@ Please go to the `./CoOp` directory, and run "CoOp+SubPT" as follows.
 # (4 shots, 100 epoch) 
 # (8 shots, 200 epoch) 
 # (16 shots, 200 epoch)
-# [EPOCH] is especially set as 50 for ImageNet.
+# [EPOCH] is specially set as 50 for all shots for ImageNet.
 cd scripts
 bash coop.sh [SHOTS] [EPOCH] [DATASET]
 
