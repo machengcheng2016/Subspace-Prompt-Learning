@@ -1,5 +1,6 @@
 # Subspace-Prompt-Learning
-Official code for "[Understanding and Mitigating Overfitting in Prompt Tuning for Vision-Language Models](https://arxiv.org/abs/2211.02219)".
+Official code for "[Understanding and Mitigating Overfitting in Prompt Tuning for Vision-Language Models](https://arxiv.org/abs/2211.02219)".  
+Authors: [Chengcheng Ma](https://scholar.google.com/citations?user=-Zir-A8AAAAJ&hl=en), [Yang Liu](https://scholar.google.com/citations?user=t1emSE0AAAAJ&hl=zh-CN), [Jiankang Deng](https://scholar.google.com/citations?user=Z_UoQFsAAAAJ), [Lingxi Xie](https://scholar.google.com/citations?user=EEMm7hwAAAAJ&hl=zh-CN), [Weiming Dong](https://scholar.google.com/citations?user=WKGx4k8AAAAJ&hl=zh-CN), [Changsheng Xu](https://scholar.google.com.sg/citations?user=hI9NRDkAAAAJ&hl=zh-CN).
 
 ## TL;DR
 We propose `Subspace Prompt Tuning (SubPT)` to mitigate the overfitting issue in the well-known prompt tuning method [CoOp](https://github.com/KaiyangZhou/CoOp), and further propose `Novel Feature Learner (NFL)` to enhance the generalization ability onto novel categories beyond the training set.
