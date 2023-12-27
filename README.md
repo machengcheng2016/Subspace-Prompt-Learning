@@ -134,13 +134,15 @@ Please go to the `./CoOp/script` directory and run `bash zeroshot.sh [DATASET]`.
 ## Citation
 If you find this work useful, please consider citing our paper. We provide a BibTeX entry of our paper below:
 ```
-@misc{ma2022understanding,
+@article{ma2022understanding,
+  author={Ma, Chengcheng and Liu, Yang and Deng, Jiankang and Xie, Lingxi and Dong, Weiming and Xu, Changsheng},
+  journal={IEEE Transactions on Circuits and Systems for Video Technology}, 
   title={Understanding and Mitigating Overfitting in Prompt Tuning for Vision-Language Models}, 
-  author={Chengcheng Ma and Yang Liu and Jiankang Deng and Lingxi Xie and Weiming Dong and Changsheng Xu},
-  year={2022},
-  eprint={2211.02219},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+  year={2023},
+  volume={33},
+  number={9},
+  pages={4616-4629},
+  doi={10.1109/TCSVT.2023.3245584}
 }
 ```
 
